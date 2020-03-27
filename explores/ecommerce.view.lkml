@@ -1,7 +1,8 @@
 include: "/views/*.lkml"
 
 
-explore: order_items {
+explore: order_items_hub {
+  extension: required
   join: users {
     type: left_outer
     relationship: many_to_one
@@ -25,9 +26,13 @@ explore: order_items {
 
 }
 
-explore: users {}
+explore: users_hub {
+  extension: required
 
-explore: events {
+}
+
+explore: events_hub {
+  extension: required
   join: users {
     type: left_outer
     sql_on: ${events.user_id} = ${users.id} ;;
