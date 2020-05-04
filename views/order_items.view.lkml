@@ -1,16 +1,3 @@
-view: +order_items {
-
-  measure: count_orders {
-    type: count_distinct
-    sql: ${order_id} ;;
-  }
-
-  measure: total_revenue {
-    type: sum
-    sql: ${sale_price} ;;
-  }
-}
-
 view: order_items {
   sql_table_name: public.order_items ;;
   drill_fields: [id]
@@ -120,5 +107,18 @@ view: order_items {
       users.last_name,
       users.first_name
     ]
+  }
+}
+
+view: +order_items {
+
+  measure: count_orders {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
+  measure: total_revenue {
+    type: sum
+    sql: ${sale_price} ;;
   }
 }
