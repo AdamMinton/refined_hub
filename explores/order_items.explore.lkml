@@ -1,7 +1,11 @@
-include: "/views/*.lkml"
+include: "/views/order_items.view"
+include: "/views/inventory_items.view"
+include: "/views/products.view"
+include: "/views/distribution_centers.view"
+include: "/views/users.view"
 
 
-explore: order_items_hub {
+explore: hub_order_items {
   extension: required
   join: users {
     type: left_outer
@@ -24,18 +28,4 @@ explore: order_items_hub {
     relationship: many_to_one
   }
 
-}
-
-explore: users_hub {
-  extension: required
-
-}
-
-explore: events_hub {
-  extension: required
-  join: users {
-    type: left_outer
-    sql_on: ${events.user_id} = ${users.id} ;;
-    relationship: many_to_one
-  }
 }
