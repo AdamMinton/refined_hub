@@ -1,11 +1,11 @@
 view: order_items {
-  sql_table_name: thelook_events.ORDER_ITEMS ;;
+  sql_table_name: public.order_items ;;
   drill_fields: [id]
 
   dimension: id {
     primary_key: yes
     type: number
-    sql: ${TABLE}.ID ;;
+    sql: ${TABLE}.id ;;
   }
 
   dimension_group: created {
@@ -19,7 +19,7 @@ view: order_items {
       quarter,
       year
     ]
-    sql: ${TABLE}.CREATED_AT ;;
+    sql: ${TABLE}.created_at ;;
   }
 
   dimension_group: delivered {
@@ -33,18 +33,18 @@ view: order_items {
       quarter,
       year
     ]
-    sql: ${TABLE}.DELIVERED_AT ;;
+    sql: ${TABLE}.delivered_at ;;
   }
 
   dimension: inventory_item_id {
     type: number
     # hidden: yes
-    sql: ${TABLE}.INVENTORY_ITEM_ID ;;
+    sql: ${TABLE}.inventory_item_id ;;
   }
 
   dimension: order_id {
     type: number
-    sql: ${TABLE}.ORDER_ID ;;
+    sql: ${TABLE}.order_id ;;
   }
 
   dimension_group: returned {
@@ -58,18 +58,12 @@ view: order_items {
       quarter,
       year
     ]
-    sql: ${TABLE}.RETURNED_AT ;;
+    sql: ${TABLE}.returned_at ;;
   }
 
   dimension: sale_price {
     type: number
-    sql: ${TABLE}.SALE_PRICE ;;
-  }
-
-  measure: total_revenue {
-    type: sum
-    sql: ${sale_price} ;;
-    value_format_name: usd
+    sql: ${TABLE}.sale_price ;;
   }
 
   dimension_group: shipped {
@@ -83,18 +77,18 @@ view: order_items {
       quarter,
       year
     ]
-    sql: ${TABLE}.SHIPPED_AT ;;
+    sql: ${TABLE}.shipped_at ;;
   }
 
   dimension: status {
     type: string
-    sql: ${TABLE}.STATUS ;;
+    sql: ${TABLE}.status ;;
   }
 
   dimension: user_id {
     type: number
     # hidden: yes
-    sql: ${TABLE}.USER_ID ;;
+    sql: ${TABLE}.user_id ;;
   }
 
   measure: count {
@@ -102,15 +96,30 @@ view: order_items {
     drill_fields: [detail*]
   }
 
+
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
       id,
-      inventory_items.product_name,
       inventory_items.id,
+      inventory_items.product_name,
+      users.id,
       users.last_name,
-      users.first_name,
-      users.id
+      users.first_name
     ]
+  }
+}
+
+view: +order_items {
+
+  measure: count_orders {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
+  measure: total_revenue {
+    type: sum
+    sql: ${sale_price} ;;
+    value_format_name: usd
   }
 }
